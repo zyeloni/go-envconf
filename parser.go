@@ -28,19 +28,8 @@ func LoadStruct(structValue reflect.Value) error {
 			continue
 		}
 
-		// Rekurencyjne przetwarzanie zagnieżdżonych struktur bez własnego tagu config
-		if field.Kind() == reflect.Struct && fieldType.Tag.Get(Tag) == "" {
-			if err := LoadStruct(field); err != nil {
-				return err
-			}
-			continue
-		}
-
 		// Pobierz tag konfiguracji dla pola
 		tag := fieldType.Tag.Get(Tag)
-		if tag == "" {
-			continue
-		}
 
 		// Parsowanie tagu do mapy klucz-wartość
 		tagMap := parseTag(tag)
