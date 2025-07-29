@@ -1,6 +1,6 @@
 // Package config dostarcza funkcjonalność do ładowania konfiguracji z zmiennych środowiskowych
 // do struktur Go przy użyciu tagów struktury.
-package config
+package envconfig
 
 import (
 	"errors"
@@ -27,8 +27,10 @@ type RequiredFieldError struct {
 
 // Error implementuje interfejs error
 func (e *RequiredFieldError) Error() string {
-	return fmt.Sprintf("%s: field '%s' is required but no value was provided (env: %s)",
-		ErrMissingRequired.Error(), e.FieldName, e.EnvName)
+	return fmt.Sprintf(
+		"%s: field '%s' is required but no value was provided (env: %s)",
+		ErrMissingRequired.Error(), e.FieldName, e.EnvName,
+	)
 }
 
 // ParseError reprezentuje błąd podczas parsowania wartości
@@ -41,8 +43,10 @@ type ParseError struct {
 
 // Error implementuje interfejs error
 func (e *ParseError) Error() string {
-	return fmt.Sprintf("failed to parse value '%s' as %s for field '%s': %v",
-		e.Value, e.FieldType, e.FieldName, e.Err)
+	return fmt.Sprintf(
+		"failed to parse value '%s' as %s for field '%s': %v",
+		e.Value, e.FieldType, e.FieldName, e.Err,
+	)
 }
 
 // Unwrap implementuje interfejs errors.Unwrap

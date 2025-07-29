@@ -1,6 +1,6 @@
 // Package config dostarcza funkcjonalność do ładowania konfiguracji z zmiennych środowiskowych
 // do struktur Go przy użyciu tagów struktury.
-package config
+package envconfig
 
 import (
 	"fmt"
