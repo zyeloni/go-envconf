@@ -1,6 +1,11 @@
 # Config Manager
 
-[![pipeline status](https://gitlab.com/zyeloni/go-envconf/badges/main/pipeline.svg)](https://gitlab.com/zyeloni/go-envconf/-/commits/main)
+[![Test Status](https://github.com/zyeloni/go-envconf/actions/workflows/go.yml/badge.svg)](https://github.com/zyeloni/go-envconf/actions/workflows/go.yml)
+[![Code Coverage](https://codecov.io/gh/zyeloni/go-envconf/branch/main/graph/badge.svg)](https://codecov.io/gh/zyeloni/go-envconf)
+[![Go Reference](https://pkg.go.dev/badge/github.com/zyeloni/go-envconf.svg)](https://pkg.go.dev/github.com/zyeloni/go-envconf)
+[![Go Report Card](https://goreportcard.com/badge/github.com/zyeloni/go-envconf)](https://goreportcard.com/report/github.com/zyeloni/go-envconf)
+[![Go Version](https://img.shields.io/github/go-mod/go-version/zyeloni/go-envconf)](https://github.com/zyeloni/go-envconf)
+[![License](https://img.shields.io/github/license/zyeloni/go-envconf)](https://github.com/zyeloni/go-envconf/blob/main/LICENSE)
 
 Prosta biblioteka Go do ładowania konfiguracji ze zmiennych środowiskowych przy użyciu tagów struktury.
 
@@ -25,12 +30,12 @@ Lub po prostu skopiuj pakiet `config` do swojego projektu.
 
 ## CI/CD
 
-Projekt korzysta z GitLab CI/CD do automatycznego testowania i weryfikacji jakości kodu. Pipeline zawiera następujące etapy:
+Projekt korzysta z GitHub Actions do automatycznego testowania i weryfikacji jakości kodu. Workflow zawiera następujące etapy:
 
 1. **Lint** - sprawdzanie jakości kodu za pomocą `golint` i `go vet`
 2. **Test** - uruchamianie testów jednostkowych z pomiarem pokrycia kodu
 
-Możesz zobaczyć status ostatniego pipeline'u na odznace na górze tego README. Aby uruchomić testy lokalnie:
+Możesz zobaczyć status testów na odznace na górze tego README. Aby uruchomić testy lokalnie:
 
 ```bash
 go test -v ./...
