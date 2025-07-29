@@ -10,7 +10,7 @@ import (
 // Podstawowe błędy zwracane przez pakiet
 var (
 	// ErrNotStruct zwracany gdy konfiguracja nie jest wskaźnikiem do struktury
-	ErrNotStruct = errors.New("config must be a pointer to a struct")
+	ErrNotStruct = errors.New("envconfig must be a pointer to a struct")
 
 	// ErrUnsupportedFieldType zwracany gdy typ pola nie jest obsługiwany
 	ErrUnsupportedFieldType = errors.New("unsupported field type")
