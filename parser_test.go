@@ -132,6 +132,25 @@ func TestSetFieldValue(t *testing.T) {
 		},
 	)
 
+	t.Run(
+		"Uint", func(t *testing.T) {
+			// Tworzymy strukturę z polem float64
+			type TestStruct struct {
+				Field uint
+			}
+			s := &TestStruct{}
+			field := reflect.ValueOf(s).Elem().Field(0)
+
+			err := setFieldValue(field, "3", "Field")
+			if err != nil {
+				t.Errorf("setFieldValue() error = %v", err)
+			}
+			if s.Field != 3 {
+				t.Errorf("setFieldValue() = %v, want %v", s.Field, 3)
+			}
+		},
+	)
+
 	// Test dla bool
 	t.Run(
 		"Bool", func(t *testing.T) {
@@ -285,6 +304,99 @@ func TestSetFieldValue(t *testing.T) {
 		},
 	)
 
+	// Test dla bool z nieprawidłową wartością
+	t.Run(
+		"Invalid bool value", func(t *testing.T) {
+			// Tworzymy strukturę z polem bool
+			type TestStruct struct {
+				Field bool
+			}
+			s := &TestStruct{}
+			field := reflect.ValueOf(s).Elem().Field(0)
+			err := setFieldValue(field, "not a bool", "Field")
+			if err == nil {
+				t.Errorf("setFieldValue() error = nil, want error")
+			}
+			var parseErr *ParseError
+			if !errors.As(err, &parseErr) {
+				t.Errorf("setFieldValue() error type = %T, want *ParseError", err)
+			} else {
+				// Sprawdź pola błędu
+				if parseErr.FieldName != "Field" {
+					t.Errorf("ParseError.FieldName = %v, want %v", parseErr.FieldName, "Field")
+				}
+				if parseErr.Value != "not a bool" {
+					t.Errorf("ParseError.Value = %v, want %v", parseErr.Value, "not a bool")
+				}
+				if parseErr.FieldType != "bool" {
+					t.Errorf("ParseError.FieldType = %v, want %v", parseErr.FieldType, "bool")
+				}
+			}
+		},
+	)
+
+	// Test dla Uint z nieprawidłową wartością
+	t.Run(
+		"Invalid uint value", func(t *testing.T) {
+			// Tworzymy strukturę z polem uint
+			type TestStruct struct {
+				Field uint
+			}
+			s := &TestStruct{}
+			field := reflect.ValueOf(s).Elem().Field(0)
+			err := setFieldValue(field, "not a uint", "Field")
+			if err == nil {
+				t.Errorf("setFieldValue() error = nil, want error")
+			}
+			var parseErr *ParseError
+			if !errors.As(err, &parseErr) {
+				t.Errorf("setFieldValue() error type = %T, want *ParseError", err)
+			} else {
+				// Sprawdź pola błędu
+				if parseErr.FieldName != "Field" {
+					t.Errorf("ParseError.FieldName = %v, want %v", parseErr.FieldName, "Field")
+				}
+				if parseErr.Value != "not a uint" {
+					t.Errorf("ParseError.Value = %v, want %v", parseErr.Value, "not a uint")
+				}
+				if parseErr.FieldType != "uint" {
+					t.Errorf("ParseError.FieldType = %v, want %v", parseErr.FieldType, "uint")
+				}
+			}
+		},
+	)
+
+	// Test dla Float32 z nieprawidłową wartością
+	t.Run(
+		"Invalid float32 value", func(t *testing.T) {
+			// Tworzymy strukturę z polem float32
+			type TestStruct struct {
+				Field float32
+			}
+			s := &TestStruct{}
+			field := reflect.ValueOf(s).Elem().Field(0)
+			err := setFieldValue(field, "not a float32", "Field")
+			if err == nil {
+				t.Errorf("setFieldValue() error = nil, want error")
+			}
+			var parseErr *ParseError
+			if !errors.As(err, &parseErr) {
+				t.Errorf("setFieldValue() error type = %T, want *ParseError", err)
+			} else {
+				// Sprawdź pola błędu
+				if parseErr.FieldName != "Field" {
+					t.Errorf("ParseError.FieldName = %v, want %v", parseErr.FieldName, "Field")
+				}
+				if parseErr.Value != "not a float32" {
+					t.Errorf("ParseError.Value = %v, want %v", parseErr.Value, "not a float32")
+				}
+				if parseErr.FieldType != "float32" {
+					t.Errorf("ParseError.FieldType = %v, want %v", parseErr.FieldType, "float32")
+				}
+			}
+		},
+	)
+
 	// Test dla nieobsługiwanego typu
 	t.Run(
 		"Unsupported type", func(t *testing.T) {
@@ -301,6 +413,7 @@ func TestSetFieldValue(t *testing.T) {
 			}
 		},
 	)
+
 }
 
 // TestLoadStruct sprawdza funkcję LoadStruct
@@ -353,6 +466,25 @@ func TestLoadStruct(t *testing.T) {
 				if reqErr.EnvName != "TEST_REQUIRED" {
 					t.Errorf("RequiredFieldError.EnvName = %v, want %v", reqErr.EnvName, "TEST_REQUIRED")
 				}
+			}
+		},
+	)
+
+	// Test dla nieeksportowane pola
+	t.Run(
+		"Unexported field", func(t *testing.T) {
+			type Config struct {
+				unexportedField string `config:"env=TEST_UNEXPORTED"`
+			}
+
+			var cfg Config
+			err := LoadStruct(reflect.ValueOf(&cfg).Elem())
+			if err != nil {
+				t.Errorf("LoadStruct() error = %v", err)
+			}
+
+			if cfg.unexportedField != "" {
+				t.Errorf("LoadStruct() unexportedField = %v, want empty string", cfg.unexportedField)
 			}
 		},
 	)

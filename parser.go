@@ -94,6 +94,7 @@ func parseTag(tag string) map[string]string {
 // Funkcja obsługuje różne typy danych, w tym string, int, uint, float, bool, time.Time i time.Duration.
 // Dla nieobsługiwanych typów zwraca błąd.
 func setFieldValue(field reflect.Value, value string, fieldName string) error {
+
 	// Obsługa specjalnego typu time.Time
 	if field.Type() == reflect.TypeOf(time.Time{}) {
 		timeValue, err := time.Parse(time.RFC3339, value)
