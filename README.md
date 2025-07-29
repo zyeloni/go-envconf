@@ -1,5 +1,7 @@
 # Config Manager
 
+[![pipeline status](https://gitlab.com/zyeloni/go-envconf/badges/main/pipeline.svg)](https://gitlab.com/zyeloni/go-envconf/-/commits/main)
+
 Prosta biblioteka Go do ładowania konfiguracji ze zmiennych środowiskowych przy użyciu tagów struktury.
 
 ## Funkcje
@@ -20,6 +22,26 @@ go get github.com/yourusername/config_manager
 ```
 
 Lub po prostu skopiuj pakiet `config` do swojego projektu.
+
+## CI/CD
+
+Projekt korzysta z GitLab CI/CD do automatycznego testowania i weryfikacji jakości kodu. Pipeline zawiera następujące etapy:
+
+1. **Lint** - sprawdzanie jakości kodu za pomocą `golint` i `go vet`
+2. **Test** - uruchamianie testów jednostkowych z pomiarem pokrycia kodu
+
+Możesz zobaczyć status ostatniego pipeline'u na odznace na górze tego README. Aby uruchomić testy lokalnie:
+
+```bash
+go test -v ./...
+```
+
+Aby uruchomić linting lokalnie:
+
+```bash
+go vet ./...
+golint -set_exit_status ./...
+```
 
 ## Użycie
 

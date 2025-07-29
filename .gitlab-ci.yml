@@ -1,0 +1,31 @@
+image: golang:1.24
+
+stages:
+  - lint
+  - test
+
+variables:
+  # Use Go modules
+  GO111MODULE: "on"
+  # Cache Go modules
+  GOPATH: $CI_PROJECT_DIR/.go
+
+cache:
+  paths:
+    - .go/pkg/mod/
+
+before_script:
+  - go mod download
+
+lint:
+  stage: lint
+  script:
+    - go install golang.org/x/lint/golint@latest
+    - golint -set_exit_status ./...
+    - go vet ./...
+
+test:
+  stage: test
+  script:
+    - go test -v -cover ./...
+  coverage: '/total:\s+\(statements\)\s+(\d+\.\d+)%/'
