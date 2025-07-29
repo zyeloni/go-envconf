@@ -67,10 +67,10 @@ func TestLoad_BasicTypes(t *testing.T) {
 func TestLoad_DefaultValues(t *testing.T) {
 	// Struktura testowa z wartościami domyślnymi
 	type Config struct {
-		String   string `config:"default=default value"`
-		Int      int    `config:"default=123"`
-		Float    float64 `config:"default=2.71"`
-		Bool     bool   `config:"default=true"`
+		String string  `config:"default=default value"`
+		Int    int     `config:"default=123"`
+		Float  float64 `config:"default=2.71"`
+		Bool   bool    `config:"default=true"`
 	}
 
 	var cfg Config
@@ -151,7 +151,7 @@ func TestLoad_NestedStructs(t *testing.T) {
 	}
 
 	type Child struct {
-		Value      string     `config:"env=CHILD"`
+		Value      string `config:"env=CHILD"`
 		GrandChild GrandChild
 	}
 

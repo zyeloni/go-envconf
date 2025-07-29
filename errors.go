@@ -11,10 +11,10 @@ import (
 var (
 	// ErrNotStruct zwracany gdy konfiguracja nie jest wskaźnikiem do struktury
 	ErrNotStruct = errors.New("config must be a pointer to a struct")
-	
+
 	// ErrUnsupportedFieldType zwracany gdy typ pola nie jest obsługiwany
 	ErrUnsupportedFieldType = errors.New("unsupported field type")
-	
+
 	// ErrMissingRequired zwracany gdy wymagane pole nie ma wartości
 	ErrMissingRequired = errors.New("missing required field")
 )
@@ -27,7 +27,7 @@ type RequiredFieldError struct {
 
 // Error implementuje interfejs error
 func (e *RequiredFieldError) Error() string {
-	return fmt.Sprintf("%s: field '%s' is required but no value was provided (env: %s)", 
+	return fmt.Sprintf("%s: field '%s' is required but no value was provided (env: %s)",
 		ErrMissingRequired.Error(), e.FieldName, e.EnvName)
 }
 
@@ -41,7 +41,7 @@ type ParseError struct {
 
 // Error implementuje interfejs error
 func (e *ParseError) Error() string {
-	return fmt.Sprintf("failed to parse value '%s' as %s for field '%s': %v", 
+	return fmt.Sprintf("failed to parse value '%s' as %s for field '%s': %v",
 		e.Value, e.FieldType, e.FieldName, e.Err)
 }
 
