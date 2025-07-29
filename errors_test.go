@@ -42,7 +42,7 @@ func TestParseError_Unwrap(t *testing.T) {
 }
 
 func TestErrorsConstants(t *testing.T) {
-	if ErrNotStruct.Error() != "config must be a pointer to a struct" {
+	if ErrNotStruct.Error() != "envconfig must be a pointer to a struct" {
 		t.Error("ErrNotStruct does not match expected message")
 	}
 	if ErrUnsupportedFieldType.Error() != "unsupported field type" {

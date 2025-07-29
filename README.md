@@ -23,10 +23,10 @@ Prosta biblioteka Go do ładowania konfiguracji ze zmiennych środowiskowych prz
 ## Instalacja
 
 ```bash
-go get github.com/yourusername/config_manager
+go get github.com/zyeloni/go-envconf
 ```
 
-Lub po prostu skopiuj pakiet `config` do swojego projektu.
+Lub po prostu skopiuj pakiet `envconfig` do swojego projektu.
 
 ## CI/CD
 
@@ -59,7 +59,7 @@ import (
     "fmt"
     "log"
     
-    "config_manager/config"
+    "github.com/zyeloni/go-envconf"
 )
 
 // Zdefiniuj strukturę konfiguracyjną z tagami struktury
@@ -74,7 +74,7 @@ func main() {
     cfg := &AppConfig{}
     
     // Załaduj konfigurację ze zmiennych środowiskowych
-    if err := config.Load(cfg); err != nil {
+    if err := envconfig.Load(cfg); err != nil {
         log.Fatalf("Nie udało się załadować konfiguracji: %v", err)
     }
     
@@ -189,10 +189,10 @@ Przykład obsługi błędów wymaganych pól:
 
 ```go
 cfg := &Config{}
-err := config.Load(cfg)
+err := envconfig.Load(cfg)
 if err != nil {
     // Sprawdź, czy to błąd wymaganego pola
-    var reqErr *config.RequiredFieldError
+    var reqErr *envconfig.RequiredFieldError
     if errors.As(err, &reqErr) {
         log.Fatalf("Brakujące wymagane pole: %s (zmienna środowiskowa: %s)", 
             reqErr.FieldName, reqErr.EnvName)
@@ -219,11 +219,11 @@ Przykład obsługi różnych typów błędów:
 
 ```go
 cfg := &Config{}
-err := config.Load(cfg)
+err := envconfig.Load(cfg)
 if err != nil {
     // Sprawdź konkretne typy błędów
-    var reqErr *config.RequiredFieldError
-    var parseErr *config.ParseError
+    var reqErr *envconfig.RequiredFieldError
+    var parseErr *envconfig.ParseError
     
     switch {
     case errors.As(err, &reqErr):
@@ -232,9 +232,9 @@ if err != nil {
     case errors.As(err, &parseErr):
         log.Fatalf("Nie udało się sparsować wartości '%s' jako %s dla pola '%s': %v", 
             parseErr.Value, parseErr.FieldType, parseErr.FieldName, parseErr.Err)
-    case errors.Is(err, config.ErrNotStruct):
+    case errors.Is(err, envconfig.ErrNotStruct):
         log.Fatalf("Konfiguracja musi być wskaźnikiem do struktury")
-    case errors.Is(err, config.ErrUnsupportedFieldType):
+    case errors.Is(err, envconfig.ErrUnsupportedFieldType):
         log.Fatalf("Konfiguracja zawiera pole z nieobsługiwanym typem")
     default:
         log.Fatalf("Nie udało się załadować konfiguracji: %v", err)
@@ -245,6 +245,12 @@ if err != nil {
 ## Przykłady
 
 Zobacz plik `main.go`, aby zobaczyć kompletny przykład użycia biblioteki.
+
+## Changelog
+
+### 2025-07-29
+- **KLUCZOWA ZMIANA**: Zmieniono nazwę pakietu z `config` na `envconfig`. Ta zmiana wymaga aktualizacji importów w istniejącym kodzie.
+- Nazwa tagu struktury pozostaje `config` dla zachowania kompatybilności wstecznej.
 
 ## Licencja
 
