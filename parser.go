@@ -187,11 +187,6 @@ func setFieldValue(field reflect.Value, value string, fieldName string) error {
 		field.SetBool(boolValue)
 	case reflect.Struct:
 		// Rekurencyjne przetwarzanie zagnieżdżonych struktur
-		// Jeśli wartość jest pusta, to tylko rekurencyjnie przetwarzamy strukturę
-		if value == "" {
-			return LoadStruct(field)
-		}
-		// W przeciwnym razie próbujemy ustawić wartość
 		return LoadStruct(field)
 	default:
 		// Zwróć błąd dla nieobsługiwanych typów
