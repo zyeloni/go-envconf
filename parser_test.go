@@ -422,8 +422,8 @@ func TestLoadStruct(t *testing.T) {
 	t.Run(
 		"Simple struct", func(t *testing.T) {
 			type Config struct {
-				String string `config:"env=TEST_STRING,default=default"`
-				Int    int    `config:"env=TEST_INT,default=42"`
+				String string `envconfig:"env=TEST_STRING,default=default"`
+				Int    int    `envconfig:"env=TEST_INT,default=42"`
 			}
 
 			var cfg Config
@@ -446,7 +446,7 @@ func TestLoadStruct(t *testing.T) {
 	t.Run(
 		"Required field", func(t *testing.T) {
 			type Config struct {
-				Required string `config:"env=TEST_REQUIRED,required=true"`
+				Required string `envconfig:"env=TEST_REQUIRED,required=true"`
 			}
 
 			var cfg Config
@@ -474,7 +474,7 @@ func TestLoadStruct(t *testing.T) {
 	t.Run(
 		"Unexported field", func(t *testing.T) {
 			type Config struct {
-				unexportedField string `config:"env=TEST_UNEXPORTED"`
+				unexportedField string `envconfig:"env=TEST_UNEXPORTED"`
 			}
 
 			var cfg Config

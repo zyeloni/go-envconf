@@ -64,9 +64,9 @@ import (
 
 // Zdefiniuj strukturę konfiguracyjną z tagami struktury
 type AppConfig struct {
-    ServerPort int    `config:"env=SERVER_PORT,default=8080"`
-    ServerHost string `config:"env=SERVER_HOST,default=localhost"`
-    Debug      bool   `config:"env=DEBUG,default=false"`
+    ServerPort int    `envconfig:"env=SERVER_PORT,default=8080"`
+    ServerHost string `envconfig:"env=SERVER_HOST,default=localhost"`
+    Debug      bool   `envconfig:"env=DEBUG,default=false"`
 }
 
 func main() {
@@ -86,10 +86,10 @@ func main() {
 
 ### Format tagu struktury
 
-Biblioteka używa tagu struktury `config` w następującym formacie:
+Biblioteka używa tagu struktury `envconfig` w następującym formacie:
 
 ```go
-`config:"env=ENV_VAR_NAME,default=default_value,required=true"`
+`envconfig:"env=ENV_VAR_NAME,default=default_value,required=true"`
 ```
 
 - `env`: Nazwa zmiennej środowiskowej, z której zostanie załadowana wartość
@@ -120,17 +120,17 @@ Biblioteka obsługuje zagnieżdżone struktury dla lepszej organizacji konfigura
 ```go
 // ServerConfig reprezentuje konfigurację specyficzną dla serwera
 type ServerConfig struct {
-    Port int    `config:"env=SERVER_PORT,default=8080"`
-    Host string `config:"env=SERVER_HOST,default=localhost"`
+    Port int    `envconfig:"env=SERVER_PORT,default=8080"`
+    Host string `envconfig:"env=SERVER_HOST,default=localhost"`
 }
 
 // DatabaseConfig reprezentuje konfigurację specyficzną dla bazy danych
 type DatabaseConfig struct {
-    Host     string `config:"env=DB_HOST,default=localhost"`
-    Port     int    `config:"env=DB_PORT,default=5432"`
-    User     string `config:"env=DB_USER,default=postgres"`
-    Password string `config:"env=DB_PASSWORD,default=secret"`
-    Name     string `config:"env=DB_NAME,default=mydb"`
+    Host     string `envconfig:"env=DB_HOST,default=localhost"`
+    Port     int    `envconfig:"env=DB_PORT,default=5432"`
+    User     string `envconfig:"env=DB_USER,default=postgres"`
+    Password string `envconfig:"env=DB_PASSWORD,default=secret"`
+    Name     string `envconfig:"env=DB_NAME,default=mydb"`
 }
 
 // AppConfig reprezentuje konfigurację aplikacji z zagnieżdżonymi strukturami
@@ -140,7 +140,7 @@ type AppConfig struct {
     Database DatabaseConfig
     
     // Ustawienia aplikacji
-    Debug bool `config:"env=DEBUG,default=false"`
+    Debug bool `envconfig:"env=DEBUG,default=false"`
 }
 ```
 
@@ -175,13 +175,13 @@ Możesz oznaczyć pola jako wymagane, aby zapewnić, że mają wartości. Jeśli
 ```go
 type Config struct {
     // To pole jest wymagane i musi być ustawione przez zmienną środowiskową
-    APIKey string `config:"env=API_KEY,required=true"`
+    APIKey string `envconfig:"env=API_KEY,required=true"`
     
     // To pole jest wymagane, ale ma wartość domyślną, więc zawsze będzie miało wartość
-    Timeout int `config:"env=TIMEOUT,default=30,required=true"`
+    Timeout int `envconfig:"env=TIMEOUT,default=30,required=true"`
     
     // To pole jest opcjonalne
-    Debug bool `config:"env=DEBUG,default=false"`
+    Debug bool `envconfig:"env=DEBUG,default=false"`
 }
 ```
 
@@ -250,7 +250,7 @@ Zobacz plik `main.go`, aby zobaczyć kompletny przykład użycia biblioteki.
 
 ### 2025-07-29
 - **KLUCZOWA ZMIANA**: Zmieniono nazwę pakietu z `config` na `envconfig`. Ta zmiana wymaga aktualizacji importów w istniejącym kodzie.
-- Nazwa tagu struktury pozostaje `config` dla zachowania kompatybilności wstecznej.
+- **KLUCZOWA ZMIANA**: Zmieniono nazwę tagu struktury z `config` na `envconfig`. Ta zmiana wymaga aktualizacji tagów struktury w istniejącym kodzie.
 
 ## Licencja
 
