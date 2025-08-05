@@ -9,10 +9,10 @@ import (
 
 // Stałe używane do parsowania tagów struktury
 const (
-	Tag         = "config"   // Nazwa tagu używanego do konfiguracji
-	EnvKey      = "env"      // Klucz określający nazwę zmiennej środowiskowej
-	DefaultKey  = "default"  // Klucz określający wartość domyślną
-	RequiredKey = "required" // Klucz określający czy pole jest wymagane
+	Tag         = "envconfig" // Nazwa tagu używanego do konfiguracji
+	EnvKey      = "env"       // Klucz określający nazwę zmiennej środowiskowej
+	DefaultKey  = "default"   // Klucz określający wartość domyślną
+	RequiredKey = "required"  // Klucz określający czy pole jest wymagane
 )
 
 // Load ładuje konfigurację z zmiennych środowiskowych do podanej struktury.
