@@ -12,7 +12,7 @@ import (
 )
 
 // LoadStruct rekurencyjnie ładuje wartości ze zmiennych środowiskowych do pól struktury.
-// Funkcja przechodzi przez wszystkie pola struktury i dla każdego pola z tagiem "config"
+// Funkcja przechodzi przez wszystkie pola struktury i dla każdego pola (z tagiem "config" lub bez)
 // próbuje załadować wartość z odpowiedniej zmiennej środowiskowej lub użyć wartości domyślnej.
 // Jeśli pole jest oznaczone jako wymagane (required = true), a nie ma wartości, zwraca błąd.
 func LoadStruct(structValue reflect.Value) error {
@@ -55,6 +55,13 @@ func LoadStruct(structValue reflect.Value) error {
 					return &RequiredFieldError{
 						FieldName: fieldType.Name,
 						EnvName:   envName,
+					}
+				}
+				// Jeśli nie ma wartości domyślnej i pole nie jest wymagane,
+				// sprawdź czy to struktura - jeśli tak, przetwarzaj ją rekurencyjnie
+				if field.Kind() == reflect.Struct {
+					if err := LoadStruct(field); err != nil {
+						return err
 					}
 				}
 				continue
