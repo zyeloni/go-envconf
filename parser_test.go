@@ -2,6 +2,7 @@ package envconfig
 
 import (
 	"errors"
+	"os"
 	"reflect"
 	"testing"
 	"time"
@@ -485,6 +486,64 @@ func TestLoadStruct(t *testing.T) {
 
 			if cfg.unexportedField != "" {
 				t.Errorf("LoadStruct() unexportedField = %v, want empty string", cfg.unexportedField)
+			}
+		},
+	)
+
+	// Test dla struktury bez tagów
+	t.Run(
+		"Struct without tags", func(t *testing.T) {
+			// Ustawiamy zmienną środowiskową dla testu
+			os.Setenv("STRING", "test_value")
+			defer os.Unsetenv("STRING")
+
+			type Config struct {
+				String string // Brak tagu
+				Int    int    // Brak tagu
+			}
+
+			var cfg Config
+			err := LoadStruct(reflect.ValueOf(&cfg).Elem())
+			if err != nil {
+				t.Errorf("LoadStruct() error = %v", err)
+			}
+
+			// Sprawdzamy czy wartość została poprawnie załadowana z zmiennej środowiskowej
+			if cfg.String != "test_value" {
+				t.Errorf("LoadStruct() String = %v, want %v", cfg.String, "test_value")
+			}
+
+			// Int powinien pozostać z wartością domyślną (0), ponieważ nie ma zmiennej środowiskowej INT
+			if cfg.Int != 0 {
+				t.Errorf("LoadStruct() Int = %v, want %v", cfg.Int, 0)
+			}
+		},
+	)
+
+	// Test dla zagnieżdżonej struktury bez tagów
+	t.Run(
+		"Nested struct without tags", func(t *testing.T) {
+			// Ustawiamy zmienną środowiskową dla testu
+			os.Setenv("NESTEDSTRING", "nested_value")
+			defer os.Unsetenv("NESTEDSTRING")
+
+			type NestedConfig struct {
+				NestedString string // Brak tagu
+			}
+
+			type Config struct {
+				Nested NestedConfig // Brak tagu
+			}
+
+			var cfg Config
+			err := LoadStruct(reflect.ValueOf(&cfg).Elem())
+			if err != nil {
+				t.Errorf("LoadStruct() error = %v", err)
+			}
+
+			// Sprawdzamy czy wartość została poprawnie załadowana z zmiennej środowiskowej
+			if cfg.Nested.NestedString != "nested_value" {
+				t.Errorf("LoadStruct() Nested.NestedString = %v, want %v", cfg.Nested.NestedString, "nested_value")
 			}
 		},
 	)
