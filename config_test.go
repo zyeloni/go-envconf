@@ -19,12 +19,12 @@ func TestLoad_BasicTypes(t *testing.T) {
 
 	// Struktura testowa
 	type Config struct {
-		String   string        `config:"env=TEST_STRING"`
-		Int      int           `config:"env=TEST_INT"`
-		Float    float64       `config:"env=TEST_FLOAT"`
-		Bool     bool          `config:"env=TEST_BOOL"`
-		Duration time.Duration `config:"env=TEST_DURATION"`
-		Time     time.Time     `config:"env=TEST_TIME"`
+		String   string        `envconfig:"env=TEST_STRING"`
+		Int      int           `envconfig:"env=TEST_INT"`
+		Float    float64       `envconfig:"env=TEST_FLOAT"`
+		Bool     bool          `envconfig:"env=TEST_BOOL"`
+		Duration time.Duration `envconfig:"env=TEST_DURATION"`
+		Time     time.Time     `envconfig:"env=TEST_TIME"`
 	}
 
 	var cfg Config
@@ -67,10 +67,10 @@ func TestLoad_BasicTypes(t *testing.T) {
 func TestLoad_DefaultValues(t *testing.T) {
 	// Struktura testowa z wartościami domyślnymi
 	type Config struct {
-		String string  `config:"default=default value"`
-		Int    int     `config:"default=123"`
-		Float  float64 `config:"default=2.71"`
-		Bool   bool    `config:"default=true"`
+		String string  `envconfig:"default=default value"`
+		Int    int     `envconfig:"default=123"`
+		Float  float64 `envconfig:"default=2.71"`
+		Bool   bool    `envconfig:"default=true"`
 	}
 
 	var cfg Config
@@ -98,8 +98,8 @@ func TestLoad_DefaultValues(t *testing.T) {
 func TestLoad_RequiredFields(t *testing.T) {
 	// Struktura testowa z wymaganym polem
 	type Config struct {
-		Required string `config:"env=TEST_REQUIRED,required=true"`
-		Optional string `config:"env=TEST_OPTIONAL"`
+		Required string `envconfig:"env=TEST_REQUIRED,required=true"`
+		Optional string `envconfig:"env=TEST_OPTIONAL"`
 	}
 
 	// Test 1: Brak wymaganego pola
@@ -147,16 +147,16 @@ func TestLoad_NestedStructs(t *testing.T) {
 
 	// Struktura testowa z zagnieżdżonymi strukturami
 	type GrandChild struct {
-		Value string `config:"env=GRANDCHILD"`
+		Value string `envconfig:"env=GRANDCHILD"`
 	}
 
 	type Child struct {
-		Value      string `config:"env=CHILD"`
+		Value      string `envconfig:"env=CHILD"`
 		GrandChild GrandChild
 	}
 
 	type Parent struct {
-		Value string `config:"env=PARENT"`
+		Value string `envconfig:"env=PARENT"`
 		Child Child
 	}
 
@@ -202,7 +202,7 @@ func TestLoad_InvalidInput(t *testing.T) {
 	// Test 3: Nieprawidłowa wartość dla typu
 	os.Setenv("TEST_INT", "not an int")
 	type Config struct {
-		Int int `config:"env=TEST_INT"`
+		Int int `envconfig:"env=TEST_INT"`
 	}
 	var cfg3 Config
 	err = Load(&cfg3)
