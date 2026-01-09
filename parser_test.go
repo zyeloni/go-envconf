@@ -520,12 +520,36 @@ func TestLoadStruct(t *testing.T) {
 		},
 	)
 
+	// Test dla pola z nazwą CamelCase bez tagu
+	t.Run(
+		"CamelCase field without tag", func(t *testing.T) {
+			// Ustawiamy zmienną środowiskową dla testu
+			os.Setenv("DB_URL", "postgres://localhost:5432/db")
+			defer os.Unsetenv("DB_URL")
+
+			type Config struct {
+				DbUrl string // Brak tagu, powinno zmapować na DB_URL
+			}
+
+			var cfg Config
+			err := LoadStruct(reflect.ValueOf(&cfg).Elem())
+			if err != nil {
+				t.Errorf("LoadStruct() error = %v", err)
+			}
+
+			// Sprawdzamy czy wartość została poprawnie załadowana z zmiennej środowiskowej DB_URL
+			if cfg.DbUrl != "postgres://localhost:5432/db" {
+				t.Errorf("LoadStruct() DbUrl = %v, want %v", cfg.DbUrl, "postgres://localhost:5432/db")
+			}
+		},
+	)
+
 	// Test dla zagnieżdżonej struktury bez tagów
 	t.Run(
 		"Nested struct without tags", func(t *testing.T) {
 			// Ustawiamy zmienną środowiskową dla testu
-			os.Setenv("NESTEDSTRING", "nested_value")
-			defer os.Unsetenv("NESTEDSTRING")
+			os.Setenv("NESTED_STRING", "nested_value")
+			defer os.Unsetenv("NESTED_STRING")
 
 			type NestedConfig struct {
 				NestedString string // Brak tagu
@@ -553,7 +577,7 @@ func TestLoadStruct(t *testing.T) {
 		"Recursive struct processing without env variable", func(t *testing.T) {
 			// Upewniamy się, że zmienna środowiskowa nie jest ustawiona
 			os.Unsetenv("NESTED")
-			os.Unsetenv("NESTEDSTRING")
+			os.Unsetenv("NESTED_STRING")
 
 			type NestedConfig struct {
 				NestedString string // Brak tagu
@@ -564,8 +588,8 @@ func TestLoadStruct(t *testing.T) {
 			}
 
 			// Ustawiamy zmienną środowiskową tylko dla zagnieżdżonego pola
-			os.Setenv("NESTEDSTRING", "nested_value")
-			defer os.Unsetenv("NESTEDSTRING")
+			os.Setenv("NESTED_STRING", "nested_value")
+			defer os.Unsetenv("NESTED_STRING")
 
 			var cfg Config
 			err := LoadStruct(reflect.ValueOf(&cfg).Elem())
