@@ -38,7 +38,7 @@ func LoadStruct(structValue reflect.Value) error {
 		envName, ok := tagMap[EnvKey]
 		if !ok {
 			// Jeśli nie określono nazwy zmiennej, użyj nazwy pola w górnym rejestrze
-			envName = strings.ToUpper(fieldType.Name)
+			envName = toSnakeCase(fieldType.Name)
 		}
 
 		// Pobierz wartość z zmiennej środowiskowej
@@ -95,6 +95,18 @@ func parseTag(tag string) map[string]string {
 	}
 
 	return result
+}
+
+// toSnakeCase konwertuje ciąg znaków z CamelCase na SNAKE_CASE.
+func toSnakeCase(s string) string {
+	var result strings.Builder
+	for i, r := range s {
+		if i > 0 && r >= 'A' && r <= 'Z' {
+			result.WriteRune('_')
+		}
+		result.WriteRune(r)
+	}
+	return strings.ToUpper(result.String())
 }
 
 // setFieldValue ustawia wartość pola struktury na podstawie wartości tekstowej.
